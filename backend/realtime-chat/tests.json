@@ -1,0 +1,41 @@
+{
+  "tests": [
+    {
+      "name": "Send message between users",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "send_message",
+        "sender_id": "USER123",
+        "receiver_id": "USER456", 
+        "content": "Hello there!"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "message": {
+          "sender_id": "string",
+          "receiver_id": "string",
+          "content": "string"
+        }
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get messages between users",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "get_messages",
+        "user1_id": "USER123",
+        "user2_id": "USER456"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "messages": []
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

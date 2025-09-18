@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -35,36 +37,16 @@ interface Community {
 }
 
 const Index = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('feed');
-  const [posts, setPosts] = useState<Post[]>([
-    {
-      id: 1,
-      author: 'Алексей Петров',
-      avatar: 'АП',
-      content: 'Отличная погода сегодня! Решил прогуляться по парку. Как дела у вас?',
-      likes: 12,
-      comments: 3,
-      timestamp: '2 часа назад'
-    },
-    {
-      id: 2,
-      author: 'Мария Иванова',
-      avatar: 'МИ',
-      content: 'Закончила новый проект! Очень довольна результатом 🚀',
-      likes: 8,
-      comments: 5,
-      timestamp: '4 часа назад'
-    },
-    {
-      id: 3,
-      author: 'Дмитрий Козлов',
-      avatar: 'ДК',
-      content: 'Кто-нибудь знает хорошие места для фотосессии в городе?',
-      likes: 15,
-      comments: 7,
-      timestamp: '6 часов назад'
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
     }
-  ]);
+  }, [user, navigate]);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const [friends] = useState<User[]>([
     { id: 1, name: 'Алексей Петров', avatar: 'АП', status: 'В сети', isOnline: true },
@@ -184,11 +166,14 @@ const Index = () => {
             <CardContent className="p-6">
               <div className="flex gap-6">
                 <Avatar className="h-24 w-24">
-                  <AvatarFallback className="bg-primary text-primary-foreground text-2xl">Вы</AvatarFallback>
+                  <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
+                    {user?.full_name.split(' ').map(n => n[0]).join('')}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold mb-2">Ваш Профиль</h2>
-                  <p className="text-muted-foreground mb-4">В сети</p>
+                  <h2 className="text-2xl font-bold mb-2">{user?.full_name}</h2>
+                  <p className="text-muted-foreground mb-2">@{user?.username}</p>
+                  <p className="text-muted-foreground mb-4">В сети • ID: {user?.id}</p>
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
                       <div className="text-2xl font-bold">156</div>
@@ -431,8 +416,23 @@ const Index = () => {
               <Button variant="ghost" size="icon">
                 <Icon name="Bell" size={20} />
               </Button>
+              {user?.is_admin && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => navigate('/admin')}
+                  className="text-red-600 border-red-600 hover:bg-red-50"
+                >
+                  Админ-панель
+                </Button>
+              )}
+              <Button variant="outline" onClick={logout}>
+                <Icon name="LogOut" className="w-4 h-4 mr-2" />
+                Выйти
+              </Button>
               <Avatar>
-                <AvatarFallback className="bg-primary text-primary-foreground">Вы</AvatarFallback>
+                <AvatarFallback className="bg-primary text-primary-foreground">
+                  {user?.full_name.split(' ').map(n => n[0]).join('')}
+                </AvatarFallback>
               </Avatar>
             </div>
           </div>

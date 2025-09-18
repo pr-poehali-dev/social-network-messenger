@@ -1,0 +1,38 @@
+{
+  "tests": [
+    {
+      "name": "Ban user with admin token",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "ban_user",
+        "admin_token": "valid_admin_token_123",
+        "target_user_id": "USER123",
+        "reason": "Violation of terms"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "action": "user_banned",
+        "target_user_id": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get users list with admin access",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "get_users",
+        "admin_token": "valid_admin_token_123"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "users": [],
+        "total": 0
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

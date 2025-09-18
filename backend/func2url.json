@@ -1,0 +1,5 @@
+{
+  "auth": "https://functions.poehali.dev/ba22f471-4319-46e2-a648-2625392bad9a",
+  "realtime-chat": "https://functions.poehali.dev/dc08e85b-d6a9-41b1-9858-9e4b064b0644",
+  "admin": "https://functions.poehali.dev/32ff698a-a00d-4888-a38f-9bac7e8eeb8d"
+}
